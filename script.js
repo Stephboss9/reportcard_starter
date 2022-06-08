@@ -60,7 +60,7 @@ const gpaPointsLookup = {
  */
 const dropdownEl = document.querySelector(".dropdown")
 // ADD more query selectors here
-
+const studentsName = document.querySelector("#student-name")
 /**
  * SOLUTIONS FOR STUDENT INFO DOM UPDATES
  */
