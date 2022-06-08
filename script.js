@@ -55,6 +55,8 @@ const gpaPointsLookup = {
   F: 0.0,
 }
 
+
+
 /**
  * QUERY SELECTORS VARIABLES GO HERE
  */
@@ -73,6 +75,8 @@ const fallSemElement = document.querySelector("#fall-semester")
 const springSemElement = document.querySelector("#spring-semester")
 const winterSemElement = document.querySelector("#winter-term")
 const reportCardTable = document.querySelector("#report-card-table")
+
+
 
 
 /**
@@ -190,8 +194,20 @@ function addCourseRowToReportCard(reportCardTableElement, course, rowNum) {
  * This function should add HTML for the totals row in the report card.
  */
 function addTotalsRow(reportCardTableElement) {
-  reportCardTableElement.innerHTML += ``
-}
+  /**get Total credites for the current semester were on */
+  let courses = studentData[semester]
+  let totalCredits = 0
+  courses.forEach(course => totalCredits += course.credits)
+  reportCardTableElement.innerHTML += `
+  <div class="table-row totals even">
+            <h4 class="code-col"></h4>
+            <h4 class="name-col"></h4>
+            <h4 class="sem-col">Totals:</h4>
+            <h4 id="total-credits" class="cred-col"></h4>
+            <h4 class="lett-col"></h4>
+            <h4 id="total-pts" class="pts-col">?</h4>
+          </div>    
+  `}
 
 /**
  * This function should add HTML for the final row in the report card.
@@ -218,7 +234,8 @@ function updateReportCard(reportCardTableElement, currentSemester) {
   addReportCardHeaders(reportCardTableElement)
   let courses = studentData[currentSemester]
   courses.forEach(course => {addCourseRowToReportCard(reportCardTableElement, course, index++)})
-  console.log("Got here")
+  addTotalsRow(reportCardTableElement)
+  addUpStudentCredits(reportCardTableElement)
 }
   
 /**
@@ -271,18 +288,20 @@ function addEventListeners(
   // call the `updateReportCard` function, and close the dropdown
   dropdownButtonElement.addEventListener("click", ()=> openDropdown(dropdownElement))
 
-  fallSemesterElement.addEventListener('click', ()=> {
-    semester = "Fall Semester"
-    updateReportCard(reportCardTableElement, semester)
-    closeDropdown(dropdownElement)
-
-  })
   springSemesterElement.addEventListener('click', ()=> {
     semester = "Spring Semester"
     updateReportCard(reportCardTableElement, semester)
     closeDropdown(dropdownElement)
 
   })
+  
+  fallSemesterElement.addEventListener('click', ()=> {
+    semester = "Fall Semester"
+    updateReportCard(reportCardTableElement, semester)
+    closeDropdown(dropdownElement)
+
+  })
+  
   winterTermElement.addEventListener('click', ()=> {
     semester = "Winter Term"
     updateReportCard(reportCardTableElement, semester)
@@ -306,6 +325,19 @@ function addEventListeners(
  */
 function addUpStudentCredits(reportCardTableElement) {
   // code goes here
+  let totalOfAllCredits = 0
+  const allCredits = document.querySelectorAll("h4.cred-col span")
+  const totalCredits = document.querySelector("#total-credits")
+
+  console.log(allCredits)
+
+  if (document.querySelector("#total-credits") != null){
+    for(let i = 0; i < allCredits.length; i++){
+      totalOfAllCredits += parseInt(allCredits[i].innerHTML)
+      console.log(totalOfAllCredits)
+    }
+    totalCredits.innerHTML = totalOfAllCredits + ' credits'
+}
 }
 
 /**
